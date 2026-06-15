@@ -1,0 +1,38 @@
+# factory.py - Паттерн Фабрика
+# суть - создает объекты без указания конкретного класса
+class Notification:
+    def send(self, message):
+        pass
+
+
+# Отправка смс
+class SMSNotification(Notification):
+    def send(self, message):
+        print(f"[SMS] {message}")
+
+
+# Отправка имеил
+class EmailNotification(Notification):
+    def send(self, message):
+        print(f"[Email] {message}")
+
+
+# Фабрика
+class NotificationFactory:
+    @staticmethod
+    def create(type):
+        if type == "sms":
+            return SMSNotification()
+        elif type == "email":
+            return EmailNotification()
+        return None
+
+
+# Использование
+if __name__ == "__main__":
+    # Создаем объекты через фабрику
+    sms = NotificationFactory.create("sms")
+    sms.send("Привет!")
+
+    email = NotificationFactory.create("email")
+    email.send("Привет!")
