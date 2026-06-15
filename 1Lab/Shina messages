@@ -1,0 +1,47 @@
+# message_bus.py - Паттерн Шина сообщений
+# суть - центральный узел для обмена событиями, Отправители и получатели не знают друг о друге
+
+# Шина сообщений
+class MessageBus:
+    def __init__(self):
+        self.subscribers = {}  # словарь
+
+    def subscribe(self, event_type, callback):
+        # подписать callback на событие
+        if event_type not in self.subscribers:
+            self.subscribers[event_type] = []
+        self.subscribers[event_type].append(callback)
+
+    def publish(self, event_type, data):
+        # опубликовать событие, уведомить всех подписчиков
+        if event_type in self.subscribers:
+            for callback in self.subscribers[event_type]:
+                callback(data)
+
+
+# Подписчики
+class EmailService:
+    def send(self, data):
+        print(f"[Email] {data}")
+
+
+class SMSService:
+    def send(self, data):
+        print(f"[SMS] {data}")
+
+
+# Использование
+if __name__ == "__main__":
+    # Создаем шину
+    bus = MessageBus()
+
+    # Создание сервисов
+    email = EmailService()
+    sms = SMSService()
+
+    # Подпись сервисов на событие "order_created"
+    bus.subscribe("order_created", email.send)
+    bus.subscribe("order_created", sms.send)
+
+    # Публикуем событие (оба сервиса получат уведомление)
+    bus.publish("order_created", "Заказ создан")
