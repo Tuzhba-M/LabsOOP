@@ -1,0 +1,28 @@
+# adapter.py - Паттерн Адаптер
+# суть - можем менять алгоритм во время работы программы не изменяя класс
+# Старая система (нельзя менять)
+class OldSystem:
+    def specific_request(self):
+        return "Старые данные"
+
+# Новый интерфейс
+class NewInterface:
+    def request(self):
+        pass
+
+# Адаптер
+class Adapter(NewInterface):
+    def __init__(self, old_system):
+        self.old_system = old_system
+
+    def request(self):
+        return self.old_system.specific_request()
+
+# Использование
+if __name__ == "__main__":
+    old = OldSystem()
+    adapter = Adapter(old)
+
+    result = adapter.request()
+    print(result)
+
