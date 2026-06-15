@@ -1,0 +1,37 @@
+# strategy.py - Паттерн Стратегия
+# возможность менять алгоритм во время выполнения программы, добавляя другой класс
+
+
+class Strategy:
+    def calculate(self, a, b):
+        pass
+
+# Стратегия 1: Сложение
+class AddStrategy(Strategy):
+    def calculate(self, a, b):
+        return a + b
+
+# Стратегия 2: Вычитание
+class SubStrategy(Strategy):
+    def calculate(self, a, b):
+        return a - b
+
+
+# Контекст, использующий стратегию
+class Context:
+    def __init__(self, strategy):
+        self.strategy = strategy  # сохраняем стратегию
+
+    def execute(self, a, b):
+        return self.strategy.calculate(a, b)  # делегируем стратегии
+
+
+# Использование
+if __name__ == "__main__":
+    # Сложение
+    context = Context(AddStrategy())
+    print(f"2 + 3 = {context.execute(2, 3)}")
+
+    # Вычитание
+    context.strategy = SubStrategy()
+    print(f"5 - 3 = {context.execute(5, 3)}")
