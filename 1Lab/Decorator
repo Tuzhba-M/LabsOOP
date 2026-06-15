@@ -1,0 +1,43 @@
+# decorator.py - Паттерн Декоратор
+# суть - добавляет новые возможности объекту, оборачивая его в другой объект
+
+class Coffee:
+    def get_cost(self):
+        return 100
+
+    def get_description(self):
+        return "Кофе"
+
+
+# Базовый декоратор
+class CoffeeDecorator:
+    def __init__(self, coffee):
+        self.coffee = coffee
+
+# передача вызова
+    def get_cost(self):
+        return self.coffee.get_cost()
+
+    def get_description(self):
+        return self.coffee.get_description()
+
+
+# Конкретный декоратор (кофе с молоком)
+class MilkDecorator(CoffeeDecorator):
+    def get_cost(self):
+        # добавить стоимость к стоимости кофе
+        return self.coffee.get_cost() + 30
+
+    def get_description(self):
+        # добавить свою надпись к описанию кофе
+        return self.coffee.get_description() + " + молоко"
+
+
+# Использование
+if __name__ == "__main__":
+
+    coffee = Coffee()
+    print(f"{coffee.get_description()} = {coffee.get_cost()} руб.")
+
+    coffee = MilkDecorator(coffee)
+    print(f"{coffee.get_description()} = {coffee.get_cost()} руб.")
