@@ -1,0 +1,47 @@
+# dataclass_pattern.py - Паттерн Dataclass
+# суть - упрощает создание классов для хранения данных
+
+# Класс для моделей данных
+class BaseModel:
+    def __init__(self, **kwargs):
+        # kwargs - принимает любые именованные аргументы
+        # setattr - динамически создает поля объекта
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def to_dict(self):
+        # __dict__ - все поля объекта в виде словаря
+        return self.__dict__.copy()
+
+    def update(self, **kwargs):
+        # обновление полей
+        for key, value in kwargs.items():
+            if hasattr(self, key):
+                setattr(self, key, value)
+
+    # print
+    def __str__(self):
+        attrs = []
+        for key, value in self.__dict__.items():
+            attrs.append(f"{key}={value}")
+        return f"{self.__class__.__name__}({', '.join(attrs)})"
+
+
+# Модель пользователя
+class User(BaseModel):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+
+# Использование
+if __name__ == "__main__":
+    # Создание
+    user = User(name="Иван", age=25, email="ivan@mail.ru")
+    print(user)
+
+    # Преобразование в словарь
+    print(user.to_dict())
+
+    # Обновление полей
+    user.update(age=26, email="ivan@yandex.ru")
+    print(user)
