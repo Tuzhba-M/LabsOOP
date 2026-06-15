@@ -1,0 +1,38 @@
+# state.py - Паттерн Состояние
+# суть - объект меняет поведение, когда меняется его внутреннее состояние
+
+class State:
+    def handle(self, context):
+        pass
+
+
+# Состояние 1
+class StateA(State):
+    def handle(self, context):
+        print("Состояние A -> переходим в B")
+        context.state = StateB()  # меняем состояние
+
+
+# Состояние 2
+class StateB(State):
+    def handle(self, context):
+        print("Состояние B -> переходим в A")
+        context.state = StateA()  # меняем состояние
+
+
+# Контекст, меняющий поведение
+class Context:
+    def __init__(self):
+        self.state = StateA()  # начальное состояние
+
+    def request(self):
+        self.state.handle(self)  # делегируем состояние
+
+
+# Использование
+if __name__ == "__main__":
+    context = Context()
+
+    context.request()  # A -> B
+    context.request()  # B -> A
+    context.request()  # A -> B
