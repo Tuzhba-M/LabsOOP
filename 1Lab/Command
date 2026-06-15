@@ -1,0 +1,56 @@
+# command.py - Паттерн Команда
+# суть - апрос инкапсулируется как объект с методами execute() и undo()
+
+class Command:
+    def execute(self):
+        pass
+
+    def undo(self):
+        pass
+
+# Получатель команды
+class Light:
+    def on(self):
+        print("Свет включен")
+
+    def off(self):
+        print("Свет выключен")
+
+#Сама команда включения света
+class LightOnCommand(Command):
+    def __init__(self, light):
+        self.light = light
+
+    def execute(self):
+        self.light.on()
+
+    def undo(self):
+        self.light.off()
+
+# Отправитель (пульт)
+class RemoteControl:
+    def __init__(self):
+        self.command = None
+        self.history = []
+
+    def set_command(self, command):
+        self.command = command
+
+    def press(self):
+        self.command.execute()
+        self.history.append(self.command)
+
+    def undo(self):
+        if self.history:
+            self.history.pop().undo()
+
+# Использование
+if __name__ == "__main__":
+    light = Light()
+    light_on = LightOnCommand(light)
+
+    remote = RemoteControl()
+    remote.set_command(light_on)
+
+    remote.press()
+    remote.undo()
